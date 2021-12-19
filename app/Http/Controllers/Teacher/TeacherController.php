@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
 use App\Models\Classes;
+use App\Models\ClassStudent;
 use App\Models\Course;
 use App\Models\User;
 use Carbon\Carbon;
@@ -164,7 +165,15 @@ class TeacherController extends Controller
 
     public function classStudentInfo()
     {
-        return view('teacher.classStudent.classStudentInfo');
+        $id = auth()->user()->id;
+        $classStudent = ClassStudent::select('class_students.*', 'users.name', 'classes.class_name')
+            ->orderBy('created_at', 'desc')
+            ->join('users', 'users.id', 'class_students.student_id')
+            ->join('classes', 'classes.class_id', 'class_students.class_id')
+            ->where('teacher_id', $id)
+            ->get();
+        // dd($classStudent->toArray());
+        return view('teacher.classStudent.classStudentInfo')->with('classStudent', $classStudent);
     }
 
     // profile
@@ -226,7 +235,7 @@ class TeacherController extends Controller
                         'password' => Hash::make($new_password),
                     ];
                     User::where('id', $id)->update($newPassword);
-                    return back(); // auto logout 
+                    return back(); // auto logout
                 } else {
                     return back()->with('notSameBoth', 'Change password do not match. Try Again!');
                 }

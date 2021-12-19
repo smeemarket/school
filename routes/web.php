@@ -70,5 +70,11 @@ Route::group(['prefix' => 'teacher', 'namespace' => 'Teacher', 'middleware' => '
 });
 
 Route::group(['prefix' => 'student', 'namespace' => 'Student', 'middleware' => 'studentCheck'], function () {
+    // course
     Route::get('courseList', 'StudentController@index')->name('studentCourseList');
+    Route::get('lookCourse/{course_id}','StudentController@lookCourse')->name('lookCourse');
+
+    // class
+    Route::get('classList','StudentController@studentClassList')->name('studentClassList');
+    Route::get('enrollClass/{class_id}/{teacher_id}','StudentController@enrollClass')->name('enrollClass');
 });

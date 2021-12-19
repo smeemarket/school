@@ -17,6 +17,7 @@ class CreateClassStudentsTable extends Migration
             $table->id('class_student_id');
             $table->integer('class_id');
             $table->integer('student_id');
+            $table->integer('teacher_id');
             $table->integer('status');
             $table->timestamps();
         });

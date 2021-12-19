@@ -14,7 +14,7 @@
 <body class="">
     <div class="container-fluid">
         <nav class="navbar navbar-expand-lg navbar-light bg-light">
-            <a class="navbar-brand" href="#">Studnent Dashboard</a>
+            <a class="navbar-brand" href="#">Student Dashboard</a>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
                 <span class="navbar-toggler-icon"></span>
@@ -25,7 +25,7 @@
                         <a class="nav-link" href="{{ route('studentCourseList') }}">Course <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="">Class <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="{{ route('studentClassList') }}">Class <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="">Teacher List <span class="sr-only">(current)</span></a>
@@ -36,7 +36,7 @@
                     <li class="nav-item active">
                         <a class="nav-link" href="">Request Course <span class="sr-only">(current)</span></a>
                     </li>
-                    
+
                     <li class="nav-item mt-1">
                         <form action="{{ route('logout') }}" method="POST">
                             @csrf
@@ -49,7 +49,6 @@
 
         @yield('content')
     </div>
-
 
     <script src="https://cdn.jsdelivr.net/npm/jquery@3.5.1/dist/jquery.slim.min.js"
         integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj" crossorigin="anonymous">

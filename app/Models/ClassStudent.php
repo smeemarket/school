@@ -13,6 +13,7 @@ class ClassStudent extends Model
         'class_student_id',
         'class_id',
         'student_id',
+        'teacher_id',
         'status'
     ];
 }
