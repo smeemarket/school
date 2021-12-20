@@ -54,6 +54,7 @@ Route::group(['prefix' => 'teacher', 'namespace' => 'Teacher', 'middleware' => '
 
     // class student
     Route::get('classStudent', 'TeacherController@classStudentInfo')->name('teacherClassStudent');
+    Route::get('changeStatus/{class_student_id}/{status}','TeacherController@changeStatus')->name('changeStatus');
 
     // profile
     Route::get('profile', 'TeacherController@profileInfo')->name('teacherProfile');
@@ -73,8 +74,12 @@ Route::group(['prefix' => 'student', 'namespace' => 'Student', 'middleware' => '
     // course
     Route::get('courseList', 'StudentController@index')->name('studentCourseList');
     Route::get('lookCourse/{course_id}','StudentController@lookCourse')->name('lookCourse');
+    Route::get('enrollClass/{class_id}/{teacher_id}', 'StudentController@enrollClass')->name('enrollClass');
 
     // class
     Route::get('classList','StudentController@studentClassList')->name('studentClassList');
-    Route::get('enrollClass/{class_id}/{teacher_id}','StudentController@enrollClass')->name('enrollClass');
+
+    // teacher
+    Route::get('teacherList','StudentController@teacherList')->name('teacherList');
+    Route::get('courseList/{teacher_id}','StudentController@studentCourseList')->name('studentCourse');
 });

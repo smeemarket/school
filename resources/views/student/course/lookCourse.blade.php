@@ -53,8 +53,10 @@
                                     </p>
                                     <p>Class Type : <b>{{ $item->class_type }}</b></p>
                                     <p>Time : <b>{{ $item->start_date }} ~ {{ $item->end_date }}</b></p>
-                                    <a href="{{ route('enrollClass', [$item->class_id, $item->user_id]) }}"
-                                        class="btn btn-sm btn-secondary float-right">Enroll</a>
+                                    @if ($item->status == 0)
+                                        <a href="{{ route('enrollClass', [$item->class_id, $courseData[0]->id]) }}"
+                                            class="btn btn-sm btn-success float-right">Enroll</a>
+                                    @endif
                                 </div>
                             </div>
                         </div>

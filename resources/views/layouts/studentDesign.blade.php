@@ -28,7 +28,7 @@
                         <a class="nav-link" href="{{ route('studentClassList') }}">Class <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item active">
-                        <a class="nav-link" href="">Teacher List <span class="sr-only">(current)</span></a>
+                        <a class="nav-link" href="{{ route('teacherList') }}">Teacher <span class="sr-only">(current)</span></a>
                     </li>
                     <li class="nav-item active">
                         <a class="nav-link" href="">Profile <span class="sr-only">(current)</span></a>

@@ -166,14 +166,26 @@ class TeacherController extends Controller
     public function classStudentInfo()
     {
         $id = auth()->user()->id;
-        $classStudent = ClassStudent::select('class_students.*', 'users.name', 'classes.class_name')
+        $classStudent = ClassStudent::select('class_students.*', 'users.name', 'classes.class_name', 'courses.course_title')
             ->orderBy('created_at', 'desc')
             ->join('users', 'users.id', 'class_students.student_id')
             ->join('classes', 'classes.class_id', 'class_students.class_id')
+            ->join('courses', 'classes.course_id', 'courses.course_id') // အဲလိုလည်း ရတာလား
             ->where('teacher_id', $id)
             ->get();
         // dd($classStudent->toArray());
         return view('teacher.classStudent.classStudentInfo')->with('classStudent', $classStudent);
+    }
+
+    // change status
+    public function changeStatus($class_student_id, $status)
+    {
+        // dd($class_student_id,$status);
+        $data = [
+            'status' => $status,
+        ];
+        ClassStudent::where('class_student_id',$class_student_id)->update($data);
+        return back()->with(['changeStatusSuccess'=>'Change Status Success...']);
     }
 
     // profile

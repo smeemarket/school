@@ -22,13 +22,23 @@
                         <div class="card-body">
                             <h5 class="card-title">{{ $item->class_name }}</h5>
                             <hr>
-                            <p class="card-text">{{ $item->fee }}
+                            <p class="card-text">Fee - {{ $item->fee }}
                             </p>
                             <p>Class Type : <b>{{ $item->class_type }}</b></p>
                             <p>Time : {{ $item->start_date }} ~ {{ $item->end_date }}</p>
                             <p>Teacher - {{ $item->name }}</p>
-                            <a href="{{ route('enrollClass', [$item->class_id,$item->user_id]) }}"
-                                class="btn btn-sm btn-secondary float-right">Enroll</a>
+                            @if ($item->status != 1)
+                                <a href="{{ route('enrollClass', [$item->class_id, $item->id]) }}"
+                                    class="btn btn-sm btn-success float-right">Enroll this class</a>
+                            @else
+                                @if ($item->status == 2)
+                                    <p class="text-success">You can join the class.</p>
+                                @elseif ($item->status == 3)
+                                    <p class="text-info">Student full...</p>
+                                @elseif ($item->status == 4)
+                                    <p class="text-danger">Teacher rejected this class.</p>
+                                @endif
+                            @endif
                         </div>
                     </div>
                 </div>
