@@ -27,17 +27,15 @@
                             <p>Class Type : <b>{{ $item->class_type }}</b></p>
                             <p>Time : {{ $item->start_date }} ~ {{ $item->end_date }}</p>
                             <p>Teacher - {{ $item->name }}</p>
-                            @if ($item->status != 1)
+                            @if ($item->status == 0)
                                 <a href="{{ route('enrollClass', [$item->class_id, $item->id]) }}"
                                     class="btn btn-sm btn-success float-right">Enroll this class</a>
-                            @else
-                                @if ($item->status == 2)
-                                    <p class="text-success">You can join the class.</p>
-                                @elseif ($item->status == 3)
-                                    <p class="text-info">Student full...</p>
-                                @elseif ($item->status == 4)
-                                    <p class="text-danger">Teacher rejected this class.</p>
-                                @endif
+                            @elseif ($item->status == 2)
+                                <p class="text-success">You can join the class.</p>
+                            @elseif ($item->status == 3)
+                                <p class="text-info">Student full...</p>
+                            @elseif ($item->status == 4)
+                                <p class="text-danger">Teacher rejected this class.</p>
                             @endif
                         </div>
                     </div>
