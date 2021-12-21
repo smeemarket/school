@@ -44,6 +44,7 @@
                     @endif
                     <legend>Related Classes</legend>
                     <h1>Hello World</h1>
+                    <h1>Hi there</h1>
                     @foreach ($relatedClass as $item)
                         <div class="col-md-6 mt-3 float-left">
                             <div class="card">
