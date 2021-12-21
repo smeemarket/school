@@ -34,10 +34,10 @@ class StudentController extends Controller
             ->get();
         // dd($courseData->toArray());
 
-        $relatedClass = Course::select('classes.*', 'class_students.status', 'class_students.student_id')
+        $relatedClass = Course::select('classes.*')
             ->join('classes', 'classes.course_id', 'courses.course_id')
-            ->leftJoin('class_students', 'class_students.class_id', 'classes.class_id')
-            // ->where('class_students.student_id', '!=', $id)
+        // ->leftJoin('class_students', 'class_students.class_id', 'classes.class_id')
+        // ->where('class_students.student_id', $id)
             ->where('classes.course_id', $course_id)
             ->get();
         // dd($relatedClass->toArray());
@@ -62,16 +62,42 @@ class StudentController extends Controller
     public function studentClassList()
     {
         $id = auth()->user()->id;
-        $class = Classes::select('classes.*', 'users.name', 'users.id', 'class_students.status')
+        // dd($id);
+        // $data = ClassStudent::where('student_id', $id)->get();
+        // dd($data->toArray());
+
+        $class = Classes::select('classes.*', 'users.name', 'users.id')
             ->orderBy('classes.class_id', 'desc')
             ->join('users', 'users.id', 'classes.user_id')
-            ->rightJoin('class_students', 'classes.class_id', 'class_students.class_id')
-        // ->where('class_students.student_id','==',$id)
             ->paginate(2);
         // dd($class[12]->class_id);
         // dd($class->toArray());
 
-        return view('student.class.classList')->with('class', $class);
+        // $status = ClassStudent::where('student_id', $id)->get();
+        // dd($status->toArray());
+
+        return view('student.class.classList')->with(['class' => $class]);
+    }
+
+    // look class information
+    public function lookClassInformation($class_id)
+    {
+        $class = Classes::where('class_id', $class_id)->get();
+
+        $id = auth()->user()->id;
+        $attend_status = Classes::leftJoin('class_students', 'class_students.class_id', 'classes.class_id')
+            ->where('class_students.class_id', $class_id)
+            ->where('class_students.student_id', $id)
+            ->select('class_students.status')
+            ->get();
+        if (empty($attend_status[0])) {
+            $status = null;
+        } else {
+            $status = $attend_status[0]['status'];
+        }
+        // dd($attend_status->toArray());
+        // dd($status);
+        return view('student.class.lookClassInformation')->with(['class' => $class, 'status' => $status]);
     }
 
     // teacher list

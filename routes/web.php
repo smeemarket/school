@@ -78,6 +78,7 @@ Route::group(['prefix' => 'student', 'namespace' => 'Student', 'middleware' => '
 
     // class
     Route::get('classList','StudentController@studentClassList')->name('studentClassList');
+    Route::get('lookClassInformation/{class_id}','StudentController@lookClassInformation')->name('lookClassInformation');
 
     // teacher
     Route::get('teacherList','StudentController@teacherList')->name('teacherList');
