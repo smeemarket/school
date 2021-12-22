@@ -2,15 +2,15 @@
 
 namespace App\Http\Controllers\Student;
 
-use App\Models\User;
-use App\Models\Course;
+use App\Http\Controllers\Controller;
 use App\Models\Classes;
 use App\Models\ClassStudent;
-use Illuminate\Http\Request;
+use App\Models\Course;
 use App\Models\CourseRequest;
-use Illuminate\Support\Facades\DB;
-use App\Http\Controllers\Controller;
+use App\Models\User;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 
@@ -94,12 +94,13 @@ class StudentController extends Controller
             ->where('class_students.student_id', $id)
             ->select('class_students.status')
             ->get();
+        // dd($attend_status->toArray());
+
         if (empty($attend_status[0])) {
             $status = null;
         } else {
             $status = $attend_status[0]['status'];
         }
-        // dd($attend_status->toArray());
         // dd($status);
         return view('student.class.lookClassInformation')->with(['class' => $class, 'status' => $status]);
     }
@@ -223,7 +224,7 @@ class StudentController extends Controller
         ];
         // dd($data);
         CourseRequest::create($data);
-        return back()->with('requestSuccess','Course Requested. Wait teacher response');
+        return back()->with('requestSuccess', 'Course Requested. Wait teacher response');
     }
 
     // request course validation

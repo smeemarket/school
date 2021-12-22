@@ -5,7 +5,7 @@
         <p style="color:red">{{ Session::get('authError') }}</p>
     @endif
     <div class="container-fluid mt-3">
-        <legend class="text-center">
+        <legend class="text-center mb-3">
             Courses
         </legend>
         <button class="btn btn-sm btn-secondary float-right" onclick="goBack()">Back</button>

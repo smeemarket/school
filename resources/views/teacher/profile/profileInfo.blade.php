@@ -17,7 +17,7 @@
         {{-- course form open --}}
         <form action="{{ route('updateProfile') }}" method="POST">
             @csrf
-            <legend class="mb-3">Profile</legend>
+            <legend class="text-center mb-3">Profile</legend>
             <div class="form-group">
                 <label>Name</label>
                 <input type="text" class="form-control" placeholder="Enter your name" name="name"

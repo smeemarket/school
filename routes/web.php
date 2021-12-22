@@ -49,13 +49,16 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'admi
     Route::get('teacherList', 'AdminController@index')->name('teacher');
 
     // student
-    Route::get('studentList','AdminController@studentList')->name('student');
+    Route::get('studentList', 'AdminController@studentList')->name('student');
 
     // notification
-    Route::get('sendNotification','AdminController@sendNotification')->name('sendNotification');
+    Route::get('sendNotification', 'AdminController@sendNotification')->name('sendNotification');
+    Route::post('sendNotification', 'AdminController@sendNoti')->name('sendNotification');
 
     // add admin
-    Route::get('addAdmin','AdminController@addAdmin')->name('addAdmin');
+    Route::get('addAdmin', 'AdminController@addAdmin')->name('addAdmin');
+    Route::post('createAdminAccount','AdminController@createAdminAccount')->name('createAdminAccount');
+    Route::get('adminAccountList','AdminController@adminAccountList')->name('adminAccountList');
 });
 
 // teacher
@@ -115,7 +118,7 @@ Route::group(['prefix' => 'student', 'namespace' => 'Student', 'middleware' => '
     Route::post('changePassword', 'StudentController@changePassword')->name('changePassword');
 
     // course request
-    Route::get('courseRequest','StudentController@courseRequest')->name('courseRequest');
-    Route::post('requestCourse','StudentController@requestCourse')->name('requestCourse');
+    Route::get('courseRequest', 'StudentController@courseRequest')->name('courseRequest');
+    Route::post('requestCourse', 'StudentController@requestCourse')->name('requestCourse');
 
 });

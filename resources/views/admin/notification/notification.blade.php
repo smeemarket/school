@@ -6,17 +6,17 @@
     @endif
 
     <div class="container mt-3">
-        {{-- @if (Session::has('courseSuccess'))
+        @if (Session::has('success'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ Session::get('courseSuccess') }}
+                {{ Session::get('success') }}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-        @endif --}}
-        <form action="" method="POST">
+        @endif
+        <form action="{{ route('sendNotification') }}" method="POST">
             @csrf
-            <legend class="mb-3">Send Notification</legend>
+            <legend class="text-center mb-3">Send Notification</legend>
             <div class="form-group">
                 <label>Message</label>
                 <textarea rows="5" type="text" class="form-control" placeholder="Enter your message"

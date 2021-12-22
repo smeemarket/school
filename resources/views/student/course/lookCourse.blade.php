@@ -12,7 +12,7 @@
                 <div class="col-sm-12 mt-3">
                     <div class="card">
                         <div class="card-header text-center">
-                            <Legend>Teacher - {{ $item->name }}</Legend>
+                            <legend class="text-center mb-3">Teacher - {{ $item->name }}</Legend>
                         </div>
                         <div class="card-body">
                             <h5 class="card-title">{{ $item->course_title }}</h5>
@@ -29,7 +29,7 @@
         <div class="row">
             @if (empty($relatedClass->toArray()))
                 <div class="col-12">
-                    <legend>Related Classes</legend>
+                    <legend class="text-center mb-3">Related Classes</legend>
                     <p style="color:red">There is no related class for this course.</p>
                 </div>
             @else
@@ -42,7 +42,7 @@
                             </button>
                         </div>
                     @endif
-                    <legend>Related Classes</legend>
+                    <legend class="text-center mb-3">Related Classes</legend>
                     @foreach ($relatedClass as $item)
                         <div class="col-md-6 mt-3 float-left">
                             <div class="card">

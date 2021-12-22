@@ -24,7 +24,7 @@
             </div>
         @endif
 
-        <legend>Class Student</legend>
+        <legend class="text-center mb-3">Class Student</legend>
         <table class="table table-hover">
             <thead>
                 <tr>

@@ -23,7 +23,7 @@
 
         <form action="{{ route('changePassword') }}" method="POST">
             @csrf
-            <legend class="mb-3">Change Password</legend>
+            <legend class="text-center mb-3">Change Password</legend>
             <div class="form-group">
                 <label for="">Old Password</label>
                 <input type="password" name="oldPassword" id="" class="form-control" value="{{ old('oldPassword') }}">

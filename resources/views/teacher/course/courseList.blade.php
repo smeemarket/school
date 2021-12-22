@@ -22,7 +22,7 @@
                 </button>
             </div>
         @endif
-        <legend>Course List</legend>
+        <legend class="text-center mb-3">Course List</legend>
         <table class="table table-hover">
             <thead>
                 <tr>

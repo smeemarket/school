@@ -2,15 +2,16 @@
 
 namespace App\Http\Controllers\Teacher;
 
-use App\Http\Controllers\Controller;
-use App\Mail\TeacherResponseMail;
+use Carbon\Carbon;
+use App\Models\User;
+use App\Models\Course;
 use App\Models\Classes;
 use App\Models\ClassStudent;
-use App\Models\Course;
-use App\Models\CourseRequest;
-use App\Models\User;
-use Carbon\Carbon;
+use App\Models\Notification;
 use Illuminate\Http\Request;
+use App\Models\CourseRequest;
+use App\Mail\TeacherResponseMail;
+use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
@@ -293,12 +294,14 @@ class TeacherController extends Controller
             ->leftJoin('users', 'users.id', 'course_requests.student_id')
             ->paginate(7);
         // dd($news->toArray());
-        return view('teacher.news.newsInfo')->with('news',$news);
+        return view('teacher.news.newsInfo')->with('news', $news);
     }
 
     public function notificationInfo()
     {
-        return view('teacher.notification.notificationInfo');
+        $notification = Notification::orderBy('created_at', 'desc')
+            ->paginate(9);
+        return view('teacher.notification.notificationInfo')->with('notification',$notification);
     }
 
     // change profile password

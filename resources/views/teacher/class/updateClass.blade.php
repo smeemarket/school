@@ -33,7 +33,7 @@
         {{-- course form open --}}
         <form action="{{ route('updateClass', $classData->class_id) }}" method="POST">
             @csrf
-            <legend class="mb-3">Update Class</legend>
+            <legend class="text-center mb-3">Update Class</legend>
             <div class="form-group">
                 <label for="">Course Title</label>
                 <select name="courseId" class="form-control">

@@ -15,7 +15,7 @@
             </div>
         @endif
 
-        <legend>Requested Course List</legend>
+        <legend class="text-center mb-3">Requested Course List</legend>
         {{ $news->links() }}
         <table class="table table-hover">
             <thead>
@@ -43,4 +43,3 @@
         </table>
     </div>
 @endsection
-

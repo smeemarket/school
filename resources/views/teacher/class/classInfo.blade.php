@@ -25,7 +25,7 @@
         {{-- course form open --}}
         <form action="{{ route('createClass') }}" method="POST">
             @csrf
-            <legend class="mb-3">Create Class</legend>
+            <legend class="text-center mb-3">Create Class</legend>
             <div class="form-group">
                 <label for="">Course Title</label>
                 <select name="courseId" id="" class="form-control">

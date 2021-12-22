@@ -23,7 +23,7 @@
             </div>
         @endif
 
-        <legend>Class List</legend>
+        <legend class="text-center mb-3">Class List</legend>
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -48,8 +48,10 @@
                         <td>{{ $item->end_date }}</td>
                         <td>{{ $item->class_type }}</td>
                         <td>
-                            <a href="{{ route('updateClassPage',$item->class_id) }}"><button class="btn btn-sm btn-secondary">Update</button></a>
-                            <a href="{{ route('deleteClass',$item->class_id) }}"><button class="btn btn-sm btn-danger">Delete</button></a>
+                            <a href="{{ route('updateClassPage', $item->class_id) }}"><button
+                                    class="btn btn-sm btn-secondary">Update</button></a>
+                            <a href="{{ route('deleteClass', $item->class_id) }}"><button
+                                    class="btn btn-sm btn-danger">Delete</button></a>
                         </td>
                     </tr>
                 @endforeach

@@ -11,7 +11,7 @@
             <div class="col-sm-12 mt-3">
                 <div class="card">
                     <div class="card-header text-center">
-                        <Legend>Class Title - {{ $class[0]->class_name }}</Legend>
+                        <legend class="text-center mb-3">Class Title - {{ $class[0]->class_name }}</Legend>
                     </div>
                     <div class="card-body">
                         <h5 class="card-title">Class Fee - {{ $class[0]->fee }}</h5>
@@ -27,11 +27,11 @@
                             <p class="text-info">Student full...</p>
                         @elseif ($status == 4)
                             <p class="text-danger">Teacher rejected this class.</p>
-                        @elseif ($status == 0)
+                        @elseif ($status == 1)
+                            <p class="text-warning">Wait teacher response.</p>
+                        @elseif ($status == null)
                             <a href="{{ route('enrollClass', [$class[0]->class_id, $class[0]->user_id]) }}"
                                 class="btn btn-sm btn-success float-right">Enroll</a>
-                        @else
-                            <p class="text-warning">Wait teacher response.</p>
                         @endif
 
                     </div>

@@ -15,9 +15,9 @@
             </div>
         @endif --}}
 
-        <legend class="text-center mb-3">Teacher List</legend>
+        <legend class="text-center mb-3">Admin Account List</legend>
         <button class="btn btn-sm btn-success float-right mb-4">Download CSV</button>
-        {{ $teacher->links() }}
+        {{-- {{ $admin->links() }} --}}
         <table class="table table-hover">
             <thead>
                 <tr>
@@ -26,31 +26,21 @@
                     <th>Email</th>
                     <th>Gender</th>
                     <th>Phone Number</th>
-                    <th>Student Count</th>
+                    <th>Region</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($teacher as $item)
+                @foreach ($admin as $item)
                     <tr>
                         <td>{{ $item->id }}</td>
                         <td>{{ $item['name'] }}</td>{{-- နှစ် နည်း ရ --}}
                         <td>{{ $item->email }}</td>
                         <td>{{ $item['gender'] }}</td>
                         <td>{{ $item->phone_number_one }}</td>
+                        <td>{{ $item->region }}</td>
                         <td>
-                            @if (empty($count->toArray()))
-                                <b>0</b>
-                            @else
-                                @foreach ($count as $countItem)
-                                    @if ($item->id == $countItem->teacher_id)
-                                        <b>{{ $countItem->studentCount }}</b>
-                                    @endif
-                                @endforeach
-                            @endif
-                        </td>
-                        <td>
-                            <a href="" class="btn btn-sm btn-secondary">More Details</a>
+                            <a href="" class="btn btn-sm btn-outline-danger">Delete</a>
                         </td>
                     </tr>
                 @endforeach
