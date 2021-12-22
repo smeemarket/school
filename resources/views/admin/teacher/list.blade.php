@@ -1,4 +1,4 @@
-@extends('layouts.teacherDesign')
+@extends('layouts.adminDesign')
 
 @section('content')
     @if (Session::has('authError'))
@@ -6,41 +6,45 @@
     @endif
 
     <div class="container mt-3">
-        @if (Session::has('news'))
+        {{-- @if (Session::has('deleteSuccess'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
-                {{ Session::get('news') }}
+                {{ Session::get('deleteSuccess') }}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-        @endif
+        @endif --}}
 
-        <legend>Requested Course List</legend>
-        {{ $news->links() }}
+        <legend>Teacher List</legend>
+        {{ $teacher->links() }}
+        <button class="btn btn-sm btn-success mb-3 float-right">Download CSV</button>
         <table class="table table-hover">
             <thead>
                 <tr>
                     <th>ID</th>
-                    <th>Student Name</th>
-                    <th>Request Course Title</th>
-                    <th>Request course Details</th>
-                    <th>Request Date</th>
+                    <th>Name</th>
+                    <th>Email</th>
+                    <th>Gender</th>
+                    <th>Phone Number</th>
+                    <th>Student Count</th>
                     <th>Action</th>
                 </tr>
             </thead>
             <tbody>
-                @foreach ($news as $item)
+                @foreach ($teacher as $item)
                     <tr>
-                        <td>{{ $item->course_request_id }}</td>
+                        <td>{{ $item->id }}</td>
                         <td>{{ $item['name'] }}</td>{{-- နှစ် နည်း ရ --}}
-                        <td>{{ $item->course_request_title }}</td>
-                        <td>{{ $item->course_request_details }}</td>
-                        <td>{{ $item->created_at }}</td>
+                        <td>{{ $item->email }}</td>
+                        <td>{{ $item['gender'] }}</td>
+                        <td>{{ $item->phone_number_one }}</td>
                         <td></td>
+                        <td>
+                            <a href="" class="btn btn-sm btn-secondary">More Details</a>
+                        </td>
                     </tr>
                 @endforeach
             </tbody>
         </table>
     </div>
 @endsection
-

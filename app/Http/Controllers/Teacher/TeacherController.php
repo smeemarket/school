@@ -3,13 +3,16 @@
 namespace App\Http\Controllers\Teacher;
 
 use App\Http\Controllers\Controller;
+use App\Mail\TeacherResponseMail;
 use App\Models\Classes;
 use App\Models\ClassStudent;
 use App\Models\Course;
+use App\Models\CourseRequest;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
 
 class TeacherController extends Controller
@@ -181,11 +184,35 @@ class TeacherController extends Controller
     public function changeStatus($class_student_id, $status)
     {
         // dd($class_student_id,$status);
+        // 2 accept
+        // 3 full
+        // 4 reject
         $data = [
             'status' => $status,
         ];
-        ClassStudent::where('class_student_id',$class_student_id)->update($data);
-        return back()->with(['changeStatusSuccess'=>'Change Status Success...']);
+
+        $email = ClassStudent::join('users', 'users.id', 'class_students.student_id')
+            ->where('class_students.class_student_id', $class_student_id)
+            ->select('users.email')
+            ->first();
+        // dd($email->toArray());
+
+        $mail = [];
+        if ($status != 5) {
+            if ($status == 2) {
+                $mail['message'] = 'Teacher accept the class.';
+            } elseif ($status == 3) {
+                $mail['message'] = 'Student full for this class.';
+            } elseif ($status == 4) {
+                $mail['message'] = 'Teacher reject for this class.';
+            }
+            Mail::to($email->email)->send(new TeacherResponseMail($mail));
+        }
+        // $mail['email'] = $email->email;
+        // dd($mail);
+
+        ClassStudent::where('class_student_id', $class_student_id)->update($data);
+        return back()->with(['changeStatusSuccess' => 'Change Status Success...']);
     }
 
     // profile
@@ -261,7 +288,12 @@ class TeacherController extends Controller
 
     public function newsInfo()
     {
-        return view('teacher.news.newsInfo');
+        $news = CourseRequest::select('course_requests.*', 'users.name')
+            ->orderBy('course_requests.created_at', 'desc')
+            ->leftJoin('users', 'users.id', 'course_requests.student_id')
+            ->paginate(7);
+        // dd($news->toArray());
+        return view('teacher.news.newsInfo')->with('news',$news);
     }
 
     public function notificationInfo()

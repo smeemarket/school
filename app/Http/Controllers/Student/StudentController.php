@@ -2,13 +2,17 @@
 
 namespace App\Http\Controllers\Student;
 
-use App\Http\Controllers\Controller;
+use App\Models\User;
+use App\Models\Course;
 use App\Models\Classes;
 use App\Models\ClassStudent;
-use App\Models\Course;
-use App\Models\User;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Http\Request;
+use App\Models\CourseRequest;
 use Illuminate\Support\Facades\DB;
+use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Validator;
 
 class StudentController extends Controller
 {
@@ -122,5 +126,157 @@ class StudentController extends Controller
             ->join('users', 'users.id', 'courses.user_id')
             ->paginate(2);
         return view('student.teacher.courseList')->with(['course' => $course]);
+    }
+
+    // profile
+    public function profileInfo()
+    {
+        $id = auth()->user()->id;
+        $profileData = User::where('id', $id)->first();
+        // dd($profileData->toArray());
+        return view('student.profile.profileInfo')->with('profileData', $profileData);
+    }
+
+    // update profile
+    public function updateProfile(Request $request)
+    {
+        $validator = $this->requestUserProfileValidation($request);
+
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        // dd($request->all());
+        $id = auth()->user()->id;
+        $profileData = $this->getUserProfileData($request);
+        // dd($profileData);
+        User::where('id', $id)->update($profileData);
+        return back()->with('updateSuccess', 'Your Profile Successfully Updated...');
+    }
+
+    // change password page
+    public function changePasswordForm()
+    {
+        return view('student.profile.changePassword');
+    }
+
+    // change password
+    public function changePassword(Request $request)
+    {
+        // dd($request->all());
+        $validator = $this->changeProfilePassword($request);
+
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $db_password = auth()->user()->password;
+        $old_password = $request->oldPassword;
+        $new_password = $request->newPassword;
+        $confirm_password = $request->confirmPassword;
+
+        if (Hash::check($old_password, $db_password)) {
+            if (strlen($new_password) >= 8 && strlen($confirm_password) >= 8) {
+                if ($new_password == $confirm_password) {
+                    $id = auth()->user()->id;
+                    $newPassword = [
+                        'password' => Hash::make($new_password),
+                    ];
+                    User::where('id', $id)->update($newPassword);
+                    return back(); // auto logout
+                } else {
+                    return back()->with('notSameBoth', 'Change password do not match. Try Again!');
+                }
+            } else {
+                return back()->with('errorLength', 'Change password must be minimum 8 characters. Try Again!');
+            }
+        } else {
+            return back()->with('notMatch', 'Old password do not match. Try Again!');
+        }
+    }
+
+    // course request
+    public function courseRequest()
+    {
+        return view('student.courseRequest.courseRequest');
+    }
+
+    // request course
+    public function requestCourse(Request $request)
+    {
+        $validator = $this->requestCourseValidation($request);
+
+        if ($validator->fails()) {
+            return back()
+                ->withErrors($validator)
+                ->withInput();
+        }
+
+        $data = [
+            'student_id' => auth()->user()->id,
+            'course_request_title' => $request->courseRequestTitle,
+            'course_request_details' => $request->courseRequestDetails,
+        ];
+        // dd($data);
+        CourseRequest::create($data);
+        return back()->with('requestSuccess','Course Requested. Wait teacher response');
+    }
+
+    // request course validation
+    private function requestCourseValidation($request)
+    {
+        $validator = Validator::make($request->all(), [
+            'courseRequestTitle' => 'required',
+            'courseRequestDetails' => 'required',
+        ]);
+        return $validator;
+    }
+
+    // change profile password
+    private function changeProfilePassword($request)
+    {
+        $data = Validator::make($request->all(), [
+            'oldPassword' => 'required',
+            'newPassword' => 'required',
+            'confirmPassword' => 'required',
+        ]);
+        return $data;
+    }
+
+    // request user profile validation
+    private function requestUserProfileValidation($request)
+    {
+        $validator = Validator::make($request->all(), [
+            'name' => 'required',
+            'email' => 'required',
+            'dateOfBirth' => 'required',
+            'phoneNumberOne' => 'required',
+            'phoneNumberTwo' => 'required',
+            'region' => 'required',
+            'town' => 'required',
+            'address' => 'required',
+        ]);
+        return $validator;
+    }
+
+    // get user profile data
+    private function getUserProfileData($request)
+    {
+        $data = [
+            'name' => $request->name,
+            'email' => $request->email,
+            'gender' => $request->gender,
+            'date_of_birth' => $request->dateOfBirth,
+            'phone_number_one' => $request->phoneNumberOne,
+            'phone_number_two' => $request->phoneNumberTwo,
+            'region' => $request->region,
+            'town' => $request->town,
+            'address' => $request->address,
+        ];
+        return $data;
     }
 }

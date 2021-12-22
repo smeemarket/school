@@ -1,6 +1,8 @@
 <?php
 
+use App\Mail\TeacherResponseMail;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,15 +16,25 @@ use Illuminate\Support\Facades\Route;
 |
  */
 
+// original
 Route::get('/', function () {
     return view('welcome');
 });
 
+// mail testing
+Route::get('sendMail', function () {
+    $data = [
+        'message' => 'Hello this is testing mail',
+    ];
+    Mail::to('mr.sawminoo@gmail.com')->send(new TeacherResponseMail($data));
+});
+
+// middleware
 Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     // return view('dashboard');
     if (Auth::check()) {
         if (Auth::user()->role == 'admin') {
-            return redirect()->route('adminDashboard');
+            return redirect()->route('teacher');
         } elseif (Auth::user()->role == 'teacher') {
             return redirect()->route('teacherCourse');
         } elseif (Auth::user()->role == 'student') {
@@ -31,10 +43,22 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
     }
 })->name('dashboard');
 
+// admin
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'adminCheck'], function () {
-    Route::get('dashboard', 'AdminController@index')->name('adminDashboard');
+    // teacher
+    Route::get('teacherList', 'AdminController@index')->name('teacher');
+
+    // student
+    Route::get('studentList','AdminController@studentList')->name('student');
+
+    // notification
+    Route::get('sendNotification','AdminController@sendNotification')->name('sendNotification');
+
+    // add admin
+    Route::get('addAdmin','AdminController@addAdmin')->name('addAdmin');
 });
 
+// teacher
 Route::group(['prefix' => 'teacher', 'namespace' => 'Teacher', 'middleware' => 'teacherCheck'], function () {
     // course
     Route::get('course', 'TeacherController@course')->name('teacherCourse');
@@ -54,7 +78,7 @@ Route::group(['prefix' => 'teacher', 'namespace' => 'Teacher', 'middleware' => '
 
     // class student
     Route::get('classStudent', 'TeacherController@classStudentInfo')->name('teacherClassStudent');
-    Route::get('changeStatus/{class_student_id}/{status}','TeacherController@changeStatus')->name('changeStatus');
+    Route::get('changeStatus/{class_student_id}/{status}', 'TeacherController@changeStatus')->name('changeStatus');
 
     // profile
     Route::get('profile', 'TeacherController@profileInfo')->name('teacherProfile');
@@ -65,22 +89,33 @@ Route::group(['prefix' => 'teacher', 'namespace' => 'Teacher', 'middleware' => '
     // news
     Route::get('news', 'TeacherController@newsInfo')->name('teacherNews');
 
-
     // notification
     Route::get('notification', 'TeacherController@notificationInfo')->name('teacherNotification');
 });
 
+// student
 Route::group(['prefix' => 'student', 'namespace' => 'Student', 'middleware' => 'studentCheck'], function () {
     // course
     Route::get('courseList', 'StudentController@index')->name('studentCourseList');
-    Route::get('lookCourse/{course_id}','StudentController@lookCourse')->name('lookCourse');
+    Route::get('lookCourse/{course_id}', 'StudentController@lookCourse')->name('lookCourse');
     Route::get('enrollClass/{class_id}/{teacher_id}', 'StudentController@enrollClass')->name('enrollClass');
 
     // class
-    Route::get('classList','StudentController@studentClassList')->name('studentClassList');
-    Route::get('lookClassInformation/{class_id}','StudentController@lookClassInformation')->name('lookClassInformation');
+    Route::get('classList', 'StudentController@studentClassList')->name('studentClassList');
+    Route::get('lookClassInformation/{class_id}', 'StudentController@lookClassInformation')->name('lookClassInformation');
 
     // teacher
-    Route::get('teacherList','StudentController@teacherList')->name('teacherList');
-    Route::get('courseList/{teacher_id}','StudentController@studentCourseList')->name('studentCourse');
+    Route::get('teacherList', 'StudentController@teacherList')->name('teacherList');
+    Route::get('courseList/{teacher_id}', 'StudentController@studentCourseList')->name('studentCourse');
+
+    // profile
+    Route::get('profile', 'StudentController@profileInfo')->name('studentProfile');
+    Route::post('updateProfile', 'StudentController@updateProfile')->name('updateProfile');
+    Route::get('changePassword', 'StudentController@changePasswordForm')->name('changePassword');
+    Route::post('changePassword', 'StudentController@changePassword')->name('changePassword');
+
+    // course request
+    Route::get('courseRequest','StudentController@courseRequest')->name('courseRequest');
+    Route::post('requestCourse','StudentController@requestCourse')->name('requestCourse');
+
 });
