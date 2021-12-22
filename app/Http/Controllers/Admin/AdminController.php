@@ -35,6 +35,47 @@ class AdminController extends Controller
         return view('admin.teacher.list')->with(['teacher' => $teacher, 'count' => $count]);
     }
 
+    // download teacher csv
+    public function downloadTeacher()
+    {
+        $teacher = User::where('role', 'teacher')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        $csvExporter = new \Laracsv\Export();
+
+        // $csvExporter->beforeEach(function ($user) {
+        //     $user->created_at = $user->created_at->format('Y-m-d');
+        // });
+
+        $csvExporter->build($teacher, [
+            'id' => 'စဥ်',
+            'name' => 'နာမည်',
+            'email'=>'အီးမေးလ်',
+            'gender'=>'လိင်',
+            'phone_number_one'=>'ဖုန်း'
+        ]);
+
+        $csvReader = $csvExporter->getReader();
+
+        $csvReader->setOutputBOM(\League\Csv\Reader::BOM_UTF8);
+
+        $filename = 'teacher-list.csv';
+
+        return response((string) $csvReader)
+            ->header('Content-Type', 'text/csv; charset=UTF-8')
+            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
+    }
+
+    // teacher details
+    public function teacherDetails($teacher_id)
+    {
+        // dd($teacher_id);
+        $teacher = User::where('id', $teacher_id)->first();
+        // dd($teacher->toArray());
+        return view('admin.teacher.details')->with('teacher', $teacher);
+    }
+
     // student list
     public function studentList()
     {
@@ -48,6 +89,51 @@ class AdminController extends Controller
         // dd($count->toArray());
 
         return view('admin.student.list')->with(['student' => $student, 'count' => $count]);
+    }
+
+    // download student csv
+    public function downloadStudent()
+    {
+        $student = User::where('role', 'student')
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        // $count = ClassStudent::select('student_id', DB::raw('COUNT(class_students.student_id) as classCount'))
+        //     ->groupBy('class_students.student_id')
+        //     ->get();
+
+        $csvExporter = new \Laracsv\Export();
+
+        // $csvExporter->beforeEach(function ($user) {
+        //     $user->created_at = $user->created_at->format('Y-m-d');
+        // });
+
+        $csvExporter->build($student, [
+            'id' => 'စဥ်',
+            'name' => 'နာမည်',
+            'email'=>'အီးမေးလ်',
+            'gender'=>'လိင်',
+            'phone_number_one'=>'ဖုန်း'
+        ]);
+
+        $csvReader = $csvExporter->getReader();
+
+        $csvReader->setOutputBOM(\League\Csv\Reader::BOM_UTF8);
+
+        $filename = 'student-list.csv';
+
+        return response((string) $csvReader)
+            ->header('Content-Type', 'text/csv; charset=UTF-8')
+            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
+    }
+
+    // student details
+    public function studentDetails($student_id)
+    {
+        // dd($student_id);
+        $student = User::where('id', $student_id)->first();
+        // dd($student->toArray());
+        return view('admin.student.details')->with('student', $student);
     }
 
     // notification
@@ -116,6 +202,13 @@ class AdminController extends Controller
             ->orderBy('created_at', 'desc')
             ->get();
         return view('admin.addAdmin.list')->with('admin', $admin);
+    }
+
+    // delete admin account
+    public function deleteAdminAccount($admin_id)
+    {
+        User::where('id', $admin_id)->delete();
+        return back()->with('deleteSuccess', 'Delete Success...');
     }
 
     private function checkCreateAdminValidation($request)

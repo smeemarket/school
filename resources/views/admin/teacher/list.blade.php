@@ -16,7 +16,7 @@
         @endif --}}
 
         <legend class="text-center mb-3">Teacher List</legend>
-        <button class="btn btn-sm btn-success float-right mb-4">Download CSV</button>
+        <a href="{{ route('downloadTeacher') }}" class="btn btn-sm btn-success float-right mb-4">Download CSV</a>
         {{ $teacher->links() }}
         <table class="table table-hover">
             <thead>
@@ -50,7 +50,7 @@
                             @endif
                         </td>
                         <td>
-                            <a href="" class="btn btn-sm btn-secondary">More Details</a>
+                            <a href="{{ route('teacherDetails',$item->id) }}" class="btn btn-sm btn-secondary">More Details</a>
                         </td>
                     </tr>
                 @endforeach

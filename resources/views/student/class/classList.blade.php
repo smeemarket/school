@@ -6,6 +6,7 @@
     @endif
 
     <div class="container-fluid mt-3">
+        <legend class="text-center">Classes</legend>
         {{ $class->links() }}
         @if (Session::has('classAttendSuccess'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">

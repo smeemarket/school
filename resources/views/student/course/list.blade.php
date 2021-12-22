@@ -6,6 +6,7 @@
     @endif
 
     <div class="container-fluid mt-3">
+        <legend class="text-center">Courses</legend>
         {{ $course->links() }}
 
         <div class="row">

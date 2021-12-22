@@ -47,9 +47,18 @@ Route::middleware(['auth:sanctum', 'verified'])->get('/dashboard', function () {
 Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'adminCheck'], function () {
     // teacher
     Route::get('teacherList', 'AdminController@index')->name('teacher');
+    Route::get('teacherDetails/{teacher_id}','AdminController@teacherDetails')->name('teacherDetails');
+
 
     // student
     Route::get('studentList', 'AdminController@studentList')->name('student');
+    Route::get('studentDetails/{student_id}', 'AdminController@studentDetails')->name('studentDetails');
+
+    // csv
+    Route::get('downloadStudent','AdminController@downloadStudent')->name('downloadStudent');
+    Route::get('downloadTeacher', 'AdminController@downloadTeacher')->name('downloadTeacher');
+
+
 
     // notification
     Route::get('sendNotification', 'AdminController@sendNotification')->name('sendNotification');
@@ -59,6 +68,7 @@ Route::group(['prefix' => 'admin', 'namespace' => 'Admin', 'middleware' => 'admi
     Route::get('addAdmin', 'AdminController@addAdmin')->name('addAdmin');
     Route::post('createAdminAccount','AdminController@createAdminAccount')->name('createAdminAccount');
     Route::get('adminAccountList','AdminController@adminAccountList')->name('adminAccountList');
+    Route::get('deleteAdminAccount/{admin_id}','AdminController@deleteAdminAccount')->name('deleteAdminAccount');
 });
 
 // teacher

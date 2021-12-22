@@ -6,17 +6,18 @@
     @endif
 
     <div class="container mt-3">
-        {{-- @if (Session::has('deleteSuccess'))
+        @if (Session::has('deleteSuccess'))
             <div class="alert alert-success alert-dismissible fade show" role="alert">
                 {{ Session::get('deleteSuccess') }}
                 <button type="button" class="close" data-dismiss="alert" aria-label="Close">
                     <span aria-hidden="true">&times;</span>
                 </button>
             </div>
-        @endif --}}
+        @endif
 
         <legend class="text-center mb-3">Admin Account List</legend>
-        <button class="btn btn-sm btn-success float-right mb-4">Download CSV</button>
+        <button class="btn btn-sm btn-success float-right mb-4">Download CSV</button><a href="{{ route('addAdmin') }}"
+            class="btn btn-sm btn-primary">Back</a>
         {{-- {{ $admin->links() }} --}}
         <table class="table table-hover">
             <thead>
@@ -40,7 +41,8 @@
                         <td>{{ $item->phone_number_one }}</td>
                         <td>{{ $item->region }}</td>
                         <td>
-                            <a href="" class="btn btn-sm btn-outline-danger">Delete</a>
+                            <a href="{{ route('deleteAdminAccount', $item->id) }}"
+                                class="btn btn-sm btn-outline-danger">Delete</a>
                         </td>
                     </tr>
                 @endforeach

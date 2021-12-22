@@ -16,7 +16,7 @@
         @endif --}}
 
         <legend class="text-center mb-3">Student List</legend>
-        <button class="btn btn-sm btn-success float-right mb-4">Download CSV</button>
+        <a href="{{ route('downloadStudent') }}" class="btn btn-sm btn-success float-right mb-4">Download CSV</a>
         {{ $student->links() }}
         <table class="table table-hover">
             <thead>
@@ -39,18 +39,17 @@
                         <td>{{ $item['gender'] }}</td>
                         <td>{{ $item->phone_number_one }}</td>
                         <td>
-                            @if (empty($count->toArray()))
-                                <b>0</b>
-                            @else
-                                @foreach ($count as $countItem)
-                                    @if ($item->id == $countItem->student_id)
-                                        <b>{{ $countItem->classCount }}</b>
-                                    @endif
-                                @endforeach
-                            @endif
+                            @foreach ($count as $countItem)
+                                @if ($item->id == $countItem->student_id)
+                                    <b>{{ $countItem->classCount }}</b>
+                                @else
+                                    <b>0</b>
+                                @endif
+                            @endforeach
                         </td>
                         <td>
-                            <a href="" class="btn btn-sm btn-secondary">More Details</a>
+                            <a href="{{ route('studentDetails', $item->id) }}" class="btn btn-sm btn-secondary">More
+                                Details</a>
                         </td>
                     </tr>
                 @endforeach
