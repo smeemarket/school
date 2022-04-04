@@ -95,7 +95,7 @@ Route::group(['prefix' => 'teacher', 'namespace' => 'Teacher', 'middleware' => '
 
     // profile
     Route::get('profile', 'TeacherController@profileInfo')->name('teacherProfile');
-    Route::post('updateProfile', 'TeacherController@updateProfile')->name('updateProfile');
+    Route::post('updateProfile', 'TeacherController@updateProfile')->name('updateTeacherProfile');
     Route::get('changePassword', 'TeacherController@changePasswordForm')->name('changePassword');
     Route::post('changePassword', 'TeacherController@changePassword')->name('changePassword');
 

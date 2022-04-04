@@ -14,217 +14,219 @@ use Illuminate\Support\Facades\Validator;
 
 class AdminController extends Controller
 {
-    // teacher list
-    public function index()
-    {
-        $teacher = User::where('role', 'teacher')
-            ->orderBy('created_at', 'desc')
-            ->paginate(9);
-        // dd($teacher->toArray());
+ // teacher list
+ public function index()
+ {
+  $teacher = User::where('role', 'teacher')
+   ->orderBy('created_at', 'desc')
 
-        $count = ClassStudent::select('teacher_id', DB::raw('COUNT(class_students.teacher_id) as studentCount'))
-            ->groupBy('class_students.teacher_id')
-            ->get();
-        // dd($count->toArray());
+   ->paginate(9);
 
-        // if (empty($count->toArray())) {
-        //     $status = null;
-        // }
-        // dd($status);
+  // dd($teacher->toArray());
 
-        return view('admin.teacher.list')->with(['teacher' => $teacher, 'count' => $count]);
-    }
+  $count = ClassStudent::select('teacher_id', DB::raw('COUNT(class_students.teacher_id) as studentCount'))
+   ->groupBy('class_students.teacher_id')
+   ->get();
+  // dd($count->toArray());
 
-    // download teacher csv
-    public function downloadTeacher()
-    {
-        $teacher = User::where('role', 'teacher')
-            ->orderBy('created_at', 'desc')
-            ->get();
+  // if (empty($count->toArray())) {
+  //     $status = null;
+  // }
+  // dd($status);
 
-        $csvExporter = new \Laracsv\Export();
+  return view('admin.teacher.list')->with(['teacher' => $teacher, 'count' => $count]);
+ }
 
-        // $csvExporter->beforeEach(function ($user) {
-        //     $user->created_at = $user->created_at->format('Y-m-d');
-        // });
+ // download teacher csv
+ public function downloadTeacher()
+ {
+  $teacher = User::where('role', 'teacher')
+   ->orderBy('created_at', 'desc')
+   ->get();
 
-        $csvExporter->build($teacher, [
-            'id' => 'စဥ်',
-            'name' => 'နာမည်',
-            'email'=>'အီးမေးလ်',
-            'gender'=>'လိင်',
-            'phone_number_one'=>'ဖုန်း'
-        ]);
+  $csvExporter = new \Laracsv\Export();
 
-        $csvReader = $csvExporter->getReader();
+  // $csvExporter->beforeEach(function ($user) {
+  //     $user->created_at = $user->created_at->format('Y-m-d');
+  // });
 
-        $csvReader->setOutputBOM(\League\Csv\Reader::BOM_UTF8);
+  $csvExporter->build($teacher, [
+   'id'               => 'စဥ်',
+   'name'             => 'နာမည်',
+   'email'            => 'အီးမေးလ်',
+   'gender'           => 'လိင်',
+   'phone_number_one' => 'ဖုန်း',
 
-        $filename = 'teacher-list.csv';
+  ]);
 
-        return response((string) $csvReader)
-            ->header('Content-Type', 'text/csv; charset=UTF-8')
-            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
-    }
+  $csvReader = $csvExporter->getReader();
 
-    // teacher details
-    public function teacherDetails($teacher_id)
-    {
-        // dd($teacher_id);
-        $teacher = User::where('id', $teacher_id)->first();
-        // dd($teacher->toArray());
-        return view('admin.teacher.details')->with('teacher', $teacher);
-    }
+  $csvReader->setOutputBOM(\League\Csv\Reader::BOM_UTF8);
 
-    // student list
-    public function studentList()
-    {
-        $student = User::where('role', 'student')
-            ->orderBy('created_at', 'desc')
-            ->paginate(9);
+  $filename = 'teacher-list.csv';
 
-        $count = ClassStudent::select('student_id', DB::raw('COUNT(class_students.student_id) as classCount'))
-            ->groupBy('class_students.student_id')
-            ->get();
-        // dd($count->toArray());
+  return response((string) $csvReader)
+   ->header('Content-Type', 'text/csv; charset=UTF-8')
+   ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
+ }
 
-        return view('admin.student.list')->with(['student' => $student, 'count' => $count]);
-    }
+ // teacher details
+ public function teacherDetails($teacher_id)
+ {
+  // dd($teacher_id);
+  $teacher = User::where('id', $teacher_id)->first();
+  // dd($teacher->toArray());
+  return view('admin.teacher.details')->with('teacher', $teacher);
+ }
 
-    // download student csv
-    public function downloadStudent()
-    {
-        $student = User::where('role', 'student')
-            ->orderBy('created_at', 'desc')
-            ->get();
+ // student list
+ public function studentList()
+ {
+  $student = User::where('role', 'student')
+   ->orderBy('created_at', 'desc')
+   ->paginate(9);
 
-        // $count = ClassStudent::select('student_id', DB::raw('COUNT(class_students.student_id) as classCount'))
-        //     ->groupBy('class_students.student_id')
-        //     ->get();
+  $count = ClassStudent::select('student_id', DB::raw('COUNT(class_students.student_id) as classCount'))
+   ->groupBy('class_students.student_id')
+   ->get();
+  // dd($count->toArray());
 
-        $csvExporter = new \Laracsv\Export();
+  return view('admin.student.list')->with(['student' => $student, 'count' => $count]);
+ }
 
-        // $csvExporter->beforeEach(function ($user) {
-        //     $user->created_at = $user->created_at->format('Y-m-d');
-        // });
+ // download student csv
+ public function downloadStudent()
+ {
+  $student = User::where('role', 'student')
+   ->orderBy('created_at', 'desc')
+   ->get();
 
-        $csvExporter->build($student, [
-            'id' => 'စဥ်',
-            'name' => 'နာမည်',
-            'email'=>'အီးမေးလ်',
-            'gender'=>'လိင်',
-            'phone_number_one'=>'ဖုန်း'
-        ]);
+  // $count = ClassStudent::select('student_id', DB::raw('COUNT(class_students.student_id) as classCount'))
+  //     ->groupBy('class_students.student_id')
+  //     ->get();
 
-        $csvReader = $csvExporter->getReader();
+  $csvExporter = new \Laracsv\Export();
 
-        $csvReader->setOutputBOM(\League\Csv\Reader::BOM_UTF8);
+  // $csvExporter->beforeEach(function ($user) {
+  //     $user->created_at = $user->created_at->format('Y-m-d');
+  // });
 
-        $filename = 'student-list.csv';
+  $csvExporter->build($student, [
+   'id'               => 'စဥ်',
+   'name'             => 'နာမည်',
+   'email'            => 'အီးမေးလ်',
+   'gender'           => 'လိင်',
+   'phone_number_one' => 'ဖုန်း',
+  ]);
 
-        return response((string) $csvReader)
-            ->header('Content-Type', 'text/csv; charset=UTF-8')
-            ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
-    }
+  $csvReader = $csvExporter->getReader();
 
-    // student details
-    public function studentDetails($student_id)
-    {
-        // dd($student_id);
-        $student = User::where('id', $student_id)->first();
-        // dd($student->toArray());
-        return view('admin.student.details')->with('student', $student);
-    }
+  $csvReader->setOutputBOM(\League\Csv\Reader::BOM_UTF8);
 
-    // notification
-    public function sendNotification()
-    {
-        return view('admin.notification.notification');
-    }
+  $filename = 'student-list.csv';
 
-    // send noti
-    public function sendNoti(Request $request)
-    {
-        $user_id = auth()->user()->id;
-        $sender_name = auth()->user()->name;
+  return response((string) $csvReader)
+   ->header('Content-Type', 'text/csv; charset=UTF-8')
+   ->header('Content-Disposition', 'attachment; filename="' . $filename . '"');
+ }
 
-        $data = [
-            'user_id' => $user_id,
-            'sender' => $sender_name,
-            'message' => $request->message,
-            'send_date' => Carbon::now(),
-        ];
+ // student details
+ public function studentDetails($student_id)
+ {
+  // dd($student_id);
+  $student = User::where('id', $student_id)->first();
+  // dd($student->toArray());
+  return view('admin.student.details')->with('student', $student);
+ }
 
-        // dd($data);
-        Notification::create($data);
-        return back()->with('success', 'Notification Sent');
-    }
+ // notification
+ public function sendNotification()
+ {
+  return view('admin.notification.notification');
+ }
 
-    // add admin
-    public function addAdmin()
-    {
-        return view('admin.addAdmin.create');
-    }
+ // send noti
+ public function sendNoti(Request $request)
+ {
+  $user_id     = auth()->user()->id;
+  $sender_name = auth()->user()->name;
 
-    public function createAdminAccount(Request $request)
-    {
-        $validator = $this->checkCreateAdminValidation($request);
+  $data = [
+   'user_id'   => $user_id,
+   'sender'    => $sender_name,
+   'message'   => $request->message,
+   'send_date' => Carbon::now(),
+  ];
 
-        if ($validator->fails()) {
-            return back()
-                ->withErrors($validator)
-                ->withInput();
-        }
+  // dd($data);
+  Notification::create($data);
+  return back()->with('success', 'Notification Sent');
+ }
 
-        $data = [
-            'name' => $request->name,
-            'email' => $request->email,
-            'password' => Hash::make($request->password),
-            'gender' => $request->gender,
-            'date_of_birth' => $request->dateOfBirth,
-            'name' => $request->name,
-            'phone_number_one' => $request->phone,
-            'region' => $request->region,
-            'town' => $request->town,
-            'address' => $request->address,
-            'status' => 0,
-            'role' => 'admin',
-        ];
+ // add admin
+ public function addAdmin()
+ {
+  return view('admin.addAdmin.create');
+ }
 
-        User::create($data);
-        return back()->with('createSuccess', 'New admin account was created successfully');
-    }
+ public function createAdminAccount(Request $request)
+ {
+  $validator = $this->checkCreateAdminValidation($request);
 
-    // admin account list
-    public function adminAccountList()
-    {
-        $admin = User::where('role', 'admin')
-            ->orderBy('created_at', 'desc')
-            ->get();
-        return view('admin.addAdmin.list')->with('admin', $admin);
-    }
+  if ($validator->fails()) {
+   return back()
+    ->withErrors($validator)
+    ->withInput();
+  }
 
-    // delete admin account
-    public function deleteAdminAccount($admin_id)
-    {
-        User::where('id', $admin_id)->delete();
-        return back()->with('deleteSuccess', 'Delete Success...');
-    }
+  $data = [
+   'name'             => $request->name,
+   'email'            => $request->email,
+   'password'         => Hash::make($request->password),
+   'gender'           => $request->gender,
+   'date_of_birth'    => $request->dateOfBirth,
+   'name'             => $request->name,
+   'phone_number_one' => $request->phone,
+   'region'           => $request->region,
+   'town'             => $request->town,
+   'address'          => $request->address,
+   'status'           => 0,
+   'role'             => 'admin',
+  ];
 
-    private function checkCreateAdminValidation($request)
-    {
-        $validator = Validator::make($request->all(), [
-            'name' => 'required',
-            'email' => 'required',
-            'password' => 'required',
-            'gender' => 'required',
-            'dateOfBirth' => 'required',
-            'phone' => 'required',
-            'region' => 'required',
-            'town' => 'required',
-            'address' => 'required',
-        ]);
-        return $validator;
+  User::create($data);
+  return back()->with('createSuccess', 'New admin account was created successfully');
+ }
 
-    }
+ // admin account list
+ public function adminAccountList()
+ {
+  $admin = User::where('role', 'admin')
+   ->orderBy('created_at', 'desc')
+   ->get();
+  return view('admin.addAdmin.list')->with('admin', $admin);
+ }
+
+ // delete admin account
+ public function deleteAdminAccount($admin_id)
+ {
+  User::where('id', $admin_id)->delete();
+  return back()->with('deleteSuccess', 'Delete Success...');
+ }
+
+ private function checkCreateAdminValidation($request)
+ {
+  $validator = Validator::make($request->all(), [
+   'name'        => 'required',
+   'email'       => 'required',
+   'password'    => 'required',
+   'gender'      => 'required',
+   'dateOfBirth' => 'required',
+   'phone'       => 'required',
+   'region'      => 'required',
+   'town'        => 'required',
+   'address'     => 'required',
+  ]);
+  return $validator;
+ }
 }

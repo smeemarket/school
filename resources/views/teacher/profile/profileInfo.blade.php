@@ -15,7 +15,7 @@
             </div>
         @endif
         {{-- course form open --}}
-        <form action="{{ route('updateProfile') }}" method="POST">
+        <form action="{{ route('updateTeacherProfile') }}" method="POST">
             @csrf
             <legend class="text-center mb-3">Profile</legend>
             <div class="form-group">
